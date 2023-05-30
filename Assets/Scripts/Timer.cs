@@ -3,28 +3,33 @@ using UnityEngine.UI;
 
 public class Timer : MonoBehaviour
 {
-    public Image timerBar;
-    public float duration;
-    public float time;
-    public GameObject popUpLose;
+    [SerializeField] 
+    private GridManager gridManager;
+    [SerializeField] 
+    private Image timerBar;
 
-    private bool isCount;
+    [HideInInspector]
+    public float time;
+
+    public float duration;
 
     private void Start()
     {
         time = duration;
-        isCount = true;
     }
 
     private void Update()
     {
-        if (isCount)
-            time -= Time.deltaTime;
+        //Mengurangi nilai time/detik
+        time -= Time.deltaTime;
 
+        //Menghitung nilai fill amount sesuai dengan hitungan waktu
         timerBar.fillAmount = time / duration;
+
+        //Jika waktu habis maka kalah
         if (time <= 0)
         {
-            popUpLose.SetActive(true);
+            gridManager.LoseCondition();
         }
     }
 }

@@ -4,13 +4,24 @@ using UnityEngine.UI;
 
 public class GridManager : MonoBehaviour
 {
-    public List<Image> gridBishop = new();
-    public List<Image> gridRock = new();
-    public List<Image> gridDragon = new();
-    public List<Image> gridKnight = new();
+    [SerializeField]
+    private Sprite emptyZone;
+    [SerializeField]
+    private GameObject popUpLose;
 
-    public Sprite emptyZone;
+    [HideInInspector]
+    public bool isAttacking;
 
+    private List<Image> gridBishop = new();
+    private List<Image> gridRock = new();
+    private List<Image> gridDragon = new();
+    private List<Image> gridKnight = new();
+
+    /// <summary>
+    /// Menambahkan grid yang terisi blok ke dalam list sesuai dengan tipe blok
+    /// </summary>
+    /// <param name="gridImage">Image dari blok</param>
+    /// <param name="blockIndex">Nilai index blok</param>
     public void AddGridElementList(Image gridImage, int blockIndex)
     {
         switch (blockIndex)
@@ -34,12 +45,14 @@ public class GridManager : MonoBehaviour
 
     private void CheckGridAmount()
     {
+        //Jika nilai masing-masing list adalah 3 maka akan mengosongkan grid
         if(gridBishop.Count == 3)
         {
             foreach(Image element in gridBishop)
             {
+                element.tag = "Empty Grid";
                 element.sprite = emptyZone;
-                element.GetComponent<GridElement>().canChange = true;
+                element.GetComponent<GridElement>().isEmptyGrid = true;
             }
             gridBishop.Clear();
         }
@@ -47,8 +60,9 @@ public class GridManager : MonoBehaviour
         {
             foreach(Image element in gridRock)
             {
-                element.GetComponent<Image>().sprite = emptyZone;
-                element.GetComponent<GridElement>().canChange = true;
+                element.tag = "Empty Grid";
+                element.sprite = emptyZone;
+                element.GetComponent<GridElement>().isEmptyGrid = true;
             }
             gridRock.Clear();
         }
@@ -56,8 +70,9 @@ public class GridManager : MonoBehaviour
         {
             foreach(Image element in gridKnight)
             {
-                element.GetComponent<Image>().sprite = emptyZone;
-                element.GetComponent<GridElement>().canChange = true;
+                element.tag = "Empty Grid";
+                element.sprite = emptyZone;
+                element.GetComponent<GridElement>().isEmptyGrid = true;
             }
             gridKnight.Clear();
         }
@@ -65,10 +80,21 @@ public class GridManager : MonoBehaviour
         {
             foreach(Image element in gridDragon)
             {
-                element.GetComponent<Image>().sprite = emptyZone;
-                element.GetComponent<GridElement>().canChange = true;
+                element.tag = "Empty Grid";
+                element.sprite = emptyZone;
+                element.GetComponent<GridElement>().isEmptyGrid = true;
             }
             gridDragon.Clear();
         }
+    }
+
+    /// <summary>
+    /// Fungsi jika pemain kalah
+    /// </summary>
+    public void LoseCondition()
+    {
+        //Mengaktifkan pop up lose dan mengatur time scale menjadi 0 agar game berhenti
+        popUpLose.SetActive(true);
+        Time.timeScale = 0;
     }
 }
